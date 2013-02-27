@@ -15,6 +15,8 @@
     credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
     # `git reb $number` Interactive rebase with the given `$number` of latest commits
     reb = "!r() { git rebase -i HEAD~$1; }; r"
+    # Stages all missing files for delete
+    r = !git ls-files -z --deleted | xargs -0 git rm
     # Undo a `git push`
     undopush = push -f origin HEAD^:master
     # Show verbose output about tags, branches or remotes
