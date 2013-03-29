@@ -19,6 +19,8 @@
     r = !git ls-files -z --deleted | xargs -0 git rm
     # Undo a `git push`
     undopush = push -f origin HEAD^:master
+    # Check a branch against its remote
+    check = "!c() { git log -p $1 ^origin/$1; }; c"
     # Show verbose output about tags, branches or remotes
     tags = tag -l
     branches = branch -av
