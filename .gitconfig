@@ -21,6 +21,10 @@
     undopush = push -f origin HEAD^:master
     # Check a branch against its remote
     check = "!c() { git log -p $1 ^origin/$1; }; c"
+    # Throw away the last commit
+    ohshit = reset --hard HEAD^
+    # Throw away everything since last push
+    ohfuck = "!fuck() { git fetch origin; git reset --hard origin/$1; }; fuck"
     # Show verbose output about tags, branches or remotes
     tags = tag -l
     branches = branch -av
