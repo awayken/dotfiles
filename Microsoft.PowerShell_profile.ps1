@@ -17,17 +17,21 @@ function prompt {
 
         Write-Host(' [') -nonewline
         Write-Host($currentBranch) -nonewline -foregroundcolor Yellow
-        if ($status["ahead"] -ne $FALSE) {
+        if ($status["ahead"] -eq 'ahead') {
             # We are ahead of origin
-            Write-Host(' (ahead)') -nonewline -foregroundcolor Magenta
+            Write-Host(' (ahead)') -nonewline -foregroundcolor Gray
+        }
+        elseif ($status["ahead"] -eq 'behind') {
+            # We are behind origin
+            Write-Host(' (behind)') -nonewline -foregroundcolor DarkGray
         }
 
         Write-Host(' +' + $status["added"]) -nonewline -foregroundcolor Green
-        Write-Host(' ~' + $status["modified"]) -nonewline -foregroundcolor Red
+        Write-Host(' ~' + $status["modified"]) -nonewline -foregroundcolor DarkGreen
         Write-Host(' -' + $status["deleted"]) -nonewline -foregroundcolor Red
 
         if ($status["untracked"] -ne $FALSE) {
-            Write-Host(' !') -nonewline -foregroundcolor Magenta
+            Write-Host(' ??') -nonewline -foregroundcolor Magenta
         }
 
         Write-Host(']>') -nonewline
