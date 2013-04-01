@@ -39,7 +39,7 @@ function gitStatus {
     $added = 0
     $modified = 0
     $deleted = 0
-    $ahead = $FALSE
+    $ahead = ''
     $aheadCount = 0
 
     $output = git status
@@ -48,9 +48,13 @@ function gitStatus {
     $branch = $branchbits[$branchbits.length - 1]
 
     $output | foreach {
-        if ($_ -match "^\#.*origin/.*' by (\d+) commit.*") {
+        if ($_ -match "^\#.*is behind 'origin/.*' by (\d+) commit.*") {
             $aheadCount = $matches[1]
-            $ahead = $TRUE
+            $ahead = 'behind'
+        }
+        elseif ($_ -match "^\#.*is ahead of 'origin/.*' by (\d+) commit.*") {
+            $aheadCount = $matches[1]
+            $ahead = 'ahead'
         }
         elseif ($_ -match "deleted:") {
             $deleted += 1
