@@ -1,42 +1,46 @@
 [alias]
-    # View all alias
-    alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\t=> \\2/' | sort
-    # Make a new branch
-    make = checkout -b
-    # Save your commit
-    save = commit -m
-    # View a more decorative log
-    history = log --oneline --decorate --graph
-    # `git di $number` shows the diff between the state `$number` revisions ago and the current state
-    di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
-    # Pull in remote changes for the current repository and all its submodules
-    p = !"git pull; git submodule foreach git pull origin master"
-    # Pull our common branches
-    pullall = !"git live; git pull; git dev; git pull; git test; git pull; git live"
-    # Push our common branches
-    pushall = !"git live; git push origin master; git dev; git push origin dev; git test; git push origin test_dev; git live"
-    # `git credit $name $email` Credit an author on the latest commit
-    credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
-    # `git reb $number` Interactive rebase with the given `$number` of latest commits
-    reb = "!r() { git rebase -i HEAD~$1; }; r"
-    # Stages all missing files for delete
-    r = !git ls-files -z --deleted | xargs -0 git rm
-    # Undo a `git push`
-    undopush = push -f origin HEAD^:master
-    # Check a branch against its remote
-    check = "!c() { git log -p $1 ^origin/$1; }; c"
-    # Throw away the last commit
-    ohshit = reset --hard HEAD^
-    # Throw away everything since last push
-    ohfuck = "!fuck() { git fetch origin; git reset --hard origin/$1; }; fuck"
-    # Show verbose output about tags, branches or remotes
-    tags = tag -l
-    branches = branch -av
-    remotes = remote -v
-    # Common branches
-    live = checkout master
-    dev = checkout dev
-    test = checkout test_dev
+## Compound command alias
+# View all alias
+    alias       = !"git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\t=> \\2/' | sort"
+# Pull in remote changes for the current repository and all its submodules
+    p           = !"git pull; git submodule foreach git pull origin master"
+# Stage all missing files for delete
+    r           = !"git ls-files -z --deleted | xargs -0 git rm"
+# Pull or push our common branches to their remote origins
+    pullall     = !"git checkout dev && git pull && git checkout test_dev && git pull && git checkout master && git pull"
+    pushall     = !"git checkout dev && git push origin dev && git checkout test_dev && git push origin test_dev && git checkout master && git push origin master"
+
+## Parametric command alias
+# `git di $number` Show the diff between now and the `$number`th previous commit
+    di          = !"a1() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; a1"
+# `git credit $name $email` Credit an author on the latest commit
+    credit      = !"a2() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; a2"
+# `git reb $number` Interactive rebase with the `$number` of previous commits
+    reb         = !"a3() { git rebase -i HEAD~$1; }; a3"
+# `git check $branch` Check commits on `$branch` against the remote origin/`$branch`
+    check       = !"a4() { git fetch origin; git diff --patch $1 origin/$1; }; a4"
+# `git ohfuck $branch` Reset `$branch` to origin/`$branch`
+    ohfuck      = !"a5() { git fetch origin; git reset --hard origin/$1; }; a5"
+
+## Single command alias
+# Make a new branch
+    make        = checkout -b
+# Save your commit
+    save        = commit --message
+# View a more decorative log
+    history     = log --oneline --decorate --graph
+# Undo a `git push`
+    undopush    = push --force origin HEAD^:master
+# Throw away the last commit
+    ohshit      = reset --hard HEAD^
+# Show verbose output about tags, branches or remotes
+    tags        = tag --list
+    branches    = branch --all --verbose
+    remotes     = remote --verbose
+# Common branches
+    live        = checkout master
+    dev         = checkout dev
+    test        = checkout test_dev
 
 [apply]
     # Detect whitespace errors when applying a patch
