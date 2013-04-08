@@ -11,6 +11,10 @@
     di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
     # Pull in remote changes for the current repository and all its submodules
     p = !"git pull; git submodule foreach git pull origin master"
+    # Pull our common branches
+    pullall = !"git live; git pull; git dev; git pull; git test; git pull; git live"
+    # Push our common branches
+    pushall = !"git live; git push origin master; git dev; git push origin dev; git test; git push origin test_dev; git live"
     # `git credit $name $email` Credit an author on the latest commit
     credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
     # `git reb $number` Interactive rebase with the given `$number` of latest commits
