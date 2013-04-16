@@ -6,6 +6,10 @@
     p           = !"git pull; git submodule foreach git pull origin master"
 # Stage all missing files for delete
     r           = !"git ls-files -z --deleted | xargs -0 git rm"
+# Show all files modified using `git assume` alias
+    assumed     = !"git ls-files -v | grep ^h | cut -c 3-"
+# Snapshot our progress without committing anything
+    snapshot    = !git stash save "Snapshot on $(date)" && git stash apply "stash@{0}"
 # Pull or push our common branches to their remote origins
     pullall     = !"git checkout dev && git pull && git checkout test_dev && git pull && git checkout master && git pull"
     pushall     = !"git checkout dev && git push origin dev && git checkout test_dev && git push origin test_dev && git checkout master && git push origin master"
@@ -33,6 +37,10 @@
     undopush    = push --force origin HEAD^:master
 # Throw away the last commit
     ohshit      = reset --hard HEAD^
+# Assume a file is unchanged so it doesn't show in our index
+    assume      = update-index --assume-unchanged
+# Unassume a file modified using `git assume` alias
+    unassume    = update-index --no-assume-unchanged
 # Show verbose output about tags, branches or remotes
     tags        = tag --list
     branches    = branch --all --verbose
