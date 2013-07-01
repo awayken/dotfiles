@@ -23,7 +23,7 @@
     reb         = !"a3() { git rebase -i HEAD~$1; }; a3"
 # `git check $branch` Check commits on `$branch` against the remote origin/`$branch`
     check       = !"a4() { git fetch origin; git diff --patch origin/$1 $1; }; a4"
-# `git checkdeleted $branch` Check commits on `$branch` against the remote origin/`$branch` looking for deleted files
+# `git checkgone $branch` Check commits on `$branch` against the remote origin/`$branch` looking for deleted files
     checkgone   = !"a5() { git diff origin/$1 $1 | grep -B 1 'deleted'; }; a5"
 # `git ohfuck $branch` Reset `$branch` to origin/`$branch`
     ohfuck      = !"a5() { git fetch origin; git reset --hard origin/$1; }; a5"
